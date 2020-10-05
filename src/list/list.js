@@ -32,6 +32,9 @@ function List(props) {
       if (props.data > 0) {
          return <span className="addActive" style={{ color: 'red' }}> <ArrowUpwardIcon style={{ fontSize: "12px" }} />{`${props.data}`}</span>
       }
+      else if (props.data === 0) {
+         return null;
+      }
       else {
          const item = props.data * -1
          return <span className="addActive" style={{ color: 'purple' }}><ArrowDownwardIcon style={{ fontSize: "12px" }} />{`${item}`}</span>

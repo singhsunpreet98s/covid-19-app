@@ -1,12 +1,25 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Card, Typography, Grid, CardContent } from '@material-ui/core';
 import CountUp from 'react-countup';
 import styles from './cards.module.css';
+import Minimap from '../minimap/minimap';
+import { fetchDailyData } from '../API/index'
 const Cards = ({ data: { confirmed, recovered, deaths, lastUpdate } }) => {
 
+   const [data, setData] = useState("");
+   /*const [confir, setConfir] = useState("");
+   const [rec, setRec] = useState("");
+   const [deat, setDeat] = useState("");*/
+
+   useEffect(() => {
+      const fetchData = async () => {
+         const dts = await fetchDailyData()
+         setData(dts)
+      }
+      fetchData()
+   }, [setData])
    if (!confirmed) {
       return 'loading .....'
-
    }
    return (
       <div className={styles.container}>
@@ -23,6 +36,7 @@ const Cards = ({ data: { confirmed, recovered, deaths, lastUpdate } }) => {
                      />
                   </Typography>
                   <Typography color="textSecondary">{new Date(lastUpdate).toDateString()}</Typography>
+                  <Minimap color={'#b911b9'} data={data.newConf} />
                   <Typography variant="body2">Number of confirmed casses</Typography>
                </CardContent>
             </Grid>
@@ -38,6 +52,7 @@ const Cards = ({ data: { confirmed, recovered, deaths, lastUpdate } }) => {
                      />
                   </Typography>
                   <Typography color="textSecondary">{new Date(lastUpdate).toDateString()}</Typography>
+                  <Minimap color={'#21b321'} data={data.newRec} />
                   <Typography variant="body2">Number of Recovered casses</Typography>
                </CardContent>
             </Grid>
@@ -53,6 +68,7 @@ const Cards = ({ data: { confirmed, recovered, deaths, lastUpdate } }) => {
                      />
                   </Typography>
                   <Typography color="textSecondary">{new Date(lastUpdate).toDateString()}</Typography>
+                  <Minimap color={'#f15f5f'} data={data.newDeat} />
                   <Typography variant="body2">Number of deceased casses</Typography>
                </CardContent>
             </Grid>

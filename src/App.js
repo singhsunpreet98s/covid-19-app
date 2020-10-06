@@ -1,19 +1,26 @@
-import React from 'react';
-import { fetchData, fetchOtherData } from './API/index';
+import React, { useEffect, useState } from 'react';
+import { fetchData } from './API/index';
 import Cards from './cards/cards';
-import CountyPicker from './countryPicker/countryPicker';
-import PieHolder from './chart/chart.js';
+//import CountyPicker from './countryPicker/countryPicker';
+//import PieHolder from './chart/chart.js';
 import List from './list/list';
-class App extends React.Component {
-  state = {
+function App() {
+  const [data, setData] = useState("");
+  useEffect(() => {
+    const fetch = async () => {
+      setData(await fetchData())
+    }
+    fetch()
+  }, [])
+  /*state = {
     data: "",
     country: "global"
   }
   async componentDidMount() {
     const data = await fetchData();
     this.setState({ data: data });
-  }
-  handleCountryChange = async (e) => {
+  }*/
+  /*handleCountryChange = async (e) => {
     if (e === "global") {
       const data = await fetchData();
       this.setState({ data: data })
@@ -35,16 +42,15 @@ class App extends React.Component {
         }
       })
     }
-  }
-  render() {
-    const { data } = this.state;
-    return (
-      <div>
-        <Cards data={data} />
-        <List />
+  }*/
 
-      </div>
-    )
-  }
+  return (
+    <div>
+      <Cards data={data} />
+      <List />
+
+    </div>
+  )
 }
+
 export default (App)

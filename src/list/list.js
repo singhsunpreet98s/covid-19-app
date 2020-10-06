@@ -2,16 +2,37 @@ import React, { useEffect, useState } from 'react';
 import { fetchOtherData } from '../API/index';
 import ArrowUpwardIcon from '@material-ui/icons/ArrowUpward';
 import ArrowDownwardIcon from '@material-ui/icons/ArrowDownward';
+import Pagination from '@material-ui/lab/Pagination';
+
 import './list.css';
 
+
 function List(props) {
+
    const [data, setData] = useState("");
+   const [page, setPage] = useState("");
+   const [limit, setLimit] = useState(15);
+   const [pageNo, setPageNo] = useState(1);
+   const [noOfPages, setNoOfPages] = useState('');
+   const tableHeading = [{ name: 'Country', color: 'black' }, { name: 'Total Cases', color: 'purple' }, { name: 'Recovered', color: 'green' }, { name: 'Active Cases', color: 'purple' }, { name: 'deceased', color: 'red' }]
    useEffect(() => {
       const fun = async () => {
-         setData(await fetchOtherData())
+         const newdata = await fetchOtherData()
+         setData(newdata)
+         const n = parseInt((newdata.length) / limit)
+         setNoOfPages(n)
+         const startIndex = (pageNo - 1) * limit
+         const endIndex = pageNo * limit
+         const newPage = (newdata.slice(startIndex, endIndex))
+         setPage(newPage)
       }
+
+
       fun();
    }, [setData])
+
+
+
    const AddConfi = (props) => {
       if (props.data > 0) {
          return <span className="addConfig" ><ArrowUpwardIcon style={{ fontSize: "12px" }} />{`${props.data}`}</span>
@@ -49,14 +70,13 @@ function List(props) {
       }
    }
    const Tabledata = () => {
-      if (data !== "" || data === undefined || data === null) {
+      if (page !== "" || page === undefined || page === null) {
          return (<tbody>
             {
-               data.map((item, index) => {
+               page.map((item, index) => {
                   const totalActive = item.TotalConfirmed - item.TotalRecovered - item.TotalDeaths;
                   const newActive = item.NewConfirmed - item.NewRecovered - item.NewDeaths;
                   return (<tr key={index}>
-                     <td>{index + 1}</td>
                      <td>{item.Country}</td>
                      <td style={{ color: 'black' }}>{item.TotalConfirmed}
                         <AddConfi data={item.NewConfirmed} />
@@ -79,21 +99,46 @@ function List(props) {
          return null;
       }
    }
-   return (
-      <table >
-         <thead>
-            <tr>
-               <th>S no</th>
-               <th >Country</th>
-               <th style={{ color: 'purple' }}>Total Cases</th>
-               <th style={{ color: 'green' }}>Recovered</th>
-               <th style={{ color: 'purple' }}>Active Cases</th>
-               <th style={{ color: 'red' }}>deceased</th>
 
-            </tr>
-         </thead>
-         <Tabledata />
-      </table>
+   const Line = () => {
+      return (
+         <div style={{ display: 'flex', flexDirection: 'row' }}>
+
+            {
+               /*Array.from(Array(noOfPages), (e, i) => {
+                  return <div style={{ width: '20px', height: '20px', padding: '10px', color: 'white', textAlign: 'center', backgroundColor: 'blue', borderRadius: '50%', marginRight: '10px', cursor: 'pointer' }} key={i} onClick={() => pagination(i)}>{i + 1}</div>
+               })*/
+            }
+         </div>
+      )
+   }
+   const handlePage = (e, v) => {
+      setPageNo(v)
+      const startIndex = (v) * limit
+      const endIndex = (v + 1) * limit
+      const newPage = (data.slice(startIndex, endIndex))
+      setPage(newPage)
+   }
+
+   return (
+      <>
+
+         <table >
+            <thead>
+               <tr>
+                  {tableHeading.map((item, index) => {
+                     return <th key={index} style={{ color: item.color }} >{item.name}</th>
+                  })
+                  }
+               </tr>
+            </thead>
+            <Tabledata />
+
+         </table>
+         <div style={{ marginLeft: '35%' }}>
+            <Pagination count={noOfPages} color="primary" page={pageNo} onChange={handlePage} />
+         </div>
+      </>
    )
 }
 export default (List);

@@ -3,7 +3,8 @@ import * as d3 from 'd3';
 import classes from './chart.module.css';
 import { select, line, curveCardinal, axisBottom, axisRight, scaleLinear } from 'd3'
 const data = [25, 30, 35, 40, 45, 50, 20, 12, 34, 30, 40, 70, 23, 34, 34, 12, 67, 23, 1, 67, 34, 7, 34, 56, 43, 23, 45]
-const PieHolder = () => {
+const PieHolder = (props) => {
+   console.log(props)
    const svgRef = useRef()
    const xScale = scaleLinear()
       .domain([0, data.length - 1])

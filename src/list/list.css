@@ -4,7 +4,7 @@ table thead tr th
    padding:10px;
    background-color: rgba(128, 131, 133, 0.267);
    border-radius: 2px;
-   
+   cursor:pointer;
 }
 table
 {
@@ -35,10 +35,10 @@ td:nth-child(1)
 {
    background-color: rgba(138, 135, 135, 0.222);
 }
-td:nth-child(2)
+/*td:nth-child(2)
 {
    background-color: rgba(138, 135, 135, 0.222);
-}
+}*/
 .addConfig
 {
    font-size:13px;

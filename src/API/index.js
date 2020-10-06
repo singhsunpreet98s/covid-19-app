@@ -1,9 +1,10 @@
 import axios from 'axios';
+import dataa from './data'
 //const url = "https://covid19.mathdro.id/api";
 // https://api.covid19api.com/summary
 export const fetchData = async () => {
    try {
-      const { data: { confirmed, recovered, deaths, lastUpdate } } = await axios.get('http://localhost:5000/world');
+      const { data: { confirmed, recovered, deaths, lastUpdate } } = await axios.get('https://covid19.mathdro.id/api');
       return { confirmed, recovered, deaths, lastUpdate };
    }
    catch (err) {
@@ -20,7 +21,7 @@ export const fetchData = async () => {
 }*/
 export const countries = async () => {
    try {
-      const { data: { Countries } } = await axios.get("http://localhost:5000/countries");
+      const { data: { Countries } } = await axios.get("https://api.covid19api.com/summary");
       return Countries.map((item) => item.Country)
 
 
@@ -32,7 +33,7 @@ export const countries = async () => {
 }
 export const fetchOtherData = async () => {
    try {
-      const data = await axios.get("http://localhost:5000/countries")
+      const data = await axios.get("https://api.covid19api.com/summary")
       /*data.data.Countries.map((item) => {
          // console.log(item.Country)
          if (country === item.Country) {
@@ -48,16 +49,18 @@ export const fetchOtherData = async () => {
 }
 export const fetchDailyData = async () => {
    try {
-      const data = await axios.get('http://localhost:5000/daily')
+      const data = dataa
+      //await axios.get('https://api.covidtracking.com/v1/us/daily.json')
       const newData = []
-      let a = data.data.length - 1;
-      data.data.map(item => {
+      let a = dataa.length - 1;
+      dataa.map(item => {
          newData[a] = item
          a--;
       })
       let newRec = []
       let newConf = []
       let newDeat = []
+      console.log(newData)
       newData.map((item, index) => {
          newConf.push(item.positiveIncrease)
          newRec.push(item.negativeIncrease)
